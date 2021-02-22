@@ -152,6 +152,7 @@ static int s_resolve_libcrypto_hmac(enum aws_libcrypto_version version, void *mo
     /* when built as a shared lib, and multiple versions of openssl are possibly
      * available (e.g. brazil), select 1.0.2 by default for consistency */
     if (!has_102_symbols && version == AWS_LIBCRYPTO_1_0_2) {
+        AWS_FATAL_ASSERT(!module && "Cannot read process symbols and libcrypto 1.0.2 HMAC symbols not found");
         *(void **)(&init_fn) = dlsym(module, "HMAC_CTX_init");
         *(void **)(&clean_up_fn) = dlsym(module, "HMAC_CTX_cleanup");
         *(void **)(&update_fn) = dlsym(module, "HMAC_Update");
@@ -163,6 +164,7 @@ static int s_resolve_libcrypto_hmac(enum aws_libcrypto_version version, void *mo
     }
 
     if (!has_111_symbols && version == AWS_LIBCRYPTO_1_1_1) {
+        AWS_FATAL_ASSERT(!module && "Cannot read process symbols and libcrypto 1.1.1 HMAC symbols not found");
         *(void **)(&new_fn) = dlsym(module, "HMAC_CTX_new");
         *(void **)(&reset_fn) = dlsym(module, "HMAC_CTX_reset");
         *(void **)(&free_fn) = dlsym(module, "HMAC_CTX_free");
@@ -248,6 +250,7 @@ static int s_resolve_libcrypto_md(enum aws_libcrypto_version version, void *modu
     }
 
     if (!has_102_symbols && version == AWS_LIBCRYPTO_1_0_2) {
+        AWS_FATAL_ASSERT(!module && "Cannot read process symbols and libcrypto 1.0.2 EVP_MD symbols not found");
         *(void **)(&md_create_fn) = dlsym(module, "EVP_MD_CTX_create");
         *(void **)(&md_destroy_fn) = dlsym(module, "EVP_MD_CTX_destroy");
         *(void **)(&md_init_ex_fn) = dlsym(module, "EVP_DigestInit_ex");
@@ -259,6 +262,7 @@ static int s_resolve_libcrypto_md(enum aws_libcrypto_version version, void *modu
     }
 
     if (!has_111_symbols && version == AWS_LIBCRYPTO_1_1_1) {
+        AWS_FATAL_ASSERT(!module && "Cannot read process symbols and libcrypto 1.1.1 EVP_MD symbols not found");
         *(void **)(&md_new_fn) = dlsym(module, "EVP_MD_CTX_new");
         *(void **)(&md_free_fn) = dlsym(module, "EVP_MD_CTX_free");
         *(void **)(&md_init_ex_fn) = dlsym(module, "EVP_DigestInit_ex");
