@@ -309,9 +309,10 @@ static int s_resolve_libcrypto_version(enum aws_libcrypto_version version) {
         case AWS_LIBCRYPTO_NONE: {
             FLOGF("searching process and loaded modules");
             void *process = dlopen(NULL, RTLD_NOW);
-            AWS_FATAL_ASSERT(process && "Unable to load symbols from process space");
             int result = s_resolve_libcrypto_symbols(version, process);
-            dlclose(process);
+            if (process) {
+              dlclose(process);
+            }
             return result;
         }
         case AWS_LIBCRYPTO_1_0_2: {
